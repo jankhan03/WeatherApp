@@ -29,22 +29,18 @@ import CoreLocation
 
 class NetworkManager {
 
-
+    var lat: Double
+    var lon: Double
+    
+    init(lat: Double, lon: Double) {
+        self.lat = lat
+        self.lon = lon
+    }
    
     func getData(completion: @escaping (AllWeather) -> ()) {
-        //var lon:Double
-        //var lat:Double
 
-        // типа вот тут надо вызвать функцию, но ошибка
         
-       // locationManager
-       // locationManager1
-        
-        var lat = ViewController().currentLocation?.coordinate.latitude
-        var lon = ViewController().currentLocation?.coordinate.longitude
-        
-        
-        guard let url = URL(string: " https://api.openweathermap.org/data/2.5/onecall?lat=\(lat)&lon=\(lon)&exclude=minutely,alerts,daily&appid=ac806dcc9668ab8d5aadb736a041bbb3&units=metric") else { return }
+        guard let url = URL(string: " https://api.openweathermap.org/data/2.5/onecall?lat=\(self.lat)&lon=\(self.lon)&exclude=minutely,alerts,daily&appid=ac806dcc9668ab8d5aadb736a041bbb3&units=metric") else { return }//
    
         
         URLSession.shared.dataTask(with: url) { (data, _, _) in

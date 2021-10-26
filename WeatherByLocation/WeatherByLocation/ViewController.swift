@@ -11,8 +11,10 @@ import CoreLocation
 
 class ViewController: UIViewController, CLLocationManagerDelegate {
 
-    var locationManager:CLLocationManager?
-    var currentLocation:CLLocation?
+    var locationManager: CLLocationManager?
+    var currentLocation: CLLocation?
+    var weather: AllWeather?
+    var networkManager: NetworkManager?
     
     private var latlngLabel:UILabel = {
         let label = UILabel()
@@ -22,25 +24,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         return label
     }()
     
-    var weather: AllWeather?
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setupLocation()
+        self.requestWeatherForLocation()
+        self.weather = AllWeather()
         
-        //передаем инфу
-        
-        
-        NetworkManager().getData { dataFromApi in
+        NetworkManager(lat: 1.1, lon: 1.1).getData { dataFromApi in
             self.weather = dataFromApi
-        } // создал инстанс
-       
-
+        }
         
-        print(self.weather?.current.temp)
-        
-        // location
-        
+        print(self.weather?.current?.temp ?? "ХУЙ")
+            
         latlngLabel.frame = CGRect(x: 30, y: view.bounds.height / 2 - 40, width: view.bounds.width - 40, height: 200)
         view.addSubview(latlngLabel)
         
@@ -50,21 +46,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         locationManager?.delegate = self
         locationManager?.allowsBackgroundLocationUpdates = true
-        
-        // parsing
-        
-        //NetworkManager.getData(timezone)
-        
-      //  getData
-        NetworkManager().getData { (dataFromApi) in
-            print(dataFromApi.timezone)
-            print(dataFromApi.hourly)
-        }
-
     }
-    
-    
-    // location
     
 
     func setupLocation() {
@@ -85,14 +67,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
         
     func requestWeatherForLocation() {
-        guard let currentLocation = currentLocation else {
-            return
-        }
-
-        let lon = currentLocation.coordinate.longitude
-        let lat = currentLocation.coordinate.latitude
         
-        print("\(lon) | \(lat)")
+        var lat = currentLocation?.coordinate.latitude
+        var lon = currentLocation?.coordinate.longitude
+
+        self.networkManager = NetworkManager(lat: currentLocation?.coordinate.latitude ?? 0.0, lon: currentLocation?.coordinate.longitude ?? 0.0)
+        
     }
 
     @IBAction func shareButton(_ sender: Any) {
@@ -102,14 +82,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         self.present(activityVC, animated: true, completion: nil)
     }
-    
-    
-    
-//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-//        if let location = locations.last {
-//            latLngLabel.text = "Lat : \(location.coordinate.latitude) \nLng : \(location.coordinate.longitude)"
-//        }
-//    }
 
 }
 
@@ -118,6 +90,4 @@ class ForecastViewController: UIViewController, CLLocationManagerDelegate {
         super.viewDidLoad()
         
     }
-
-
 }

@@ -10,28 +10,19 @@ import MapKit
 
 
 struct AllWeather: Codable {
-    var lat: String
-    var lon: String
-    var timezone: String
-    var timezone_offset: String
-    var current: Current
-    var hourly: [Hourly]
+    
+    var current: Current?
+    var hourly: [Hourly]?
 }
 
 struct Current: Codable {
-    var dt: String?
-    var sunrise: String?
-    var sunset: String?
-    var temp: String?
-    var pressure: String?
-    var humidity: String?
-    var dew_point: String?
-    var uvi: String?
-    var clouds: String?
-    var visibility: String?
-    var wind_speed: String?
-    var wind_gust: String?
-    var weather: [Weather]
+    var dt: Date?
+    var temp: Double?
+    var pressure: Double?
+    var humidity: Double?
+    var wind_speed: Double?
+    var wind_gust: Double?
+    var weather: [Weather]?
     
 }
 
@@ -43,18 +34,11 @@ struct Weather: Codable {
 }
 
 struct Hourly: Codable {
-    var dt: String?
-    var sunrise: String?
-    var sunset: String?
-    var temp: String?
-    var feels_like: String?
-    var pressure: String?
-    var humidity: String?
-    var dew_point: String?
-    var uvi: String?
-    var clouds: String?
-    var visibility: String?
-    var wind_speed: String?
-    var wind_gust: String?
-    var weather: [Weather]
+    var dt: Date?
+    var temp: Double?
+    var pressure: Double?
+    var humidity: Double?
+    var wind_speed: Double?
+    var wind_gust: Double?
+    var weather: [Weather]?
 }
